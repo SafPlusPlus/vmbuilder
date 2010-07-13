@@ -1,3 +1,9 @@
+vm-builder (0.11.3-1) UNRELEASED; urgency=low
+
+  * Initial release in Debian. (Closes: #XXXXXX).
+
+ -- Miguel Landaeta <miguel@miguel.cc>  Mon, 12 Jul 2010 20:35:02 -0430
+
 vm-builder (0.11.3-0ubuntu1) karmic; urgency=low
 
   * New upstream (bugfix only) release. (LP: #458587)

@@ -1,9 +1,9 @@
 Source: vm-builder
 Section: utils
 Priority: extra
-Maintainer: Soren Hansen <soren@ubuntu.com>
-Build-Depends: cdbs, debhelper (>= 5.0.38), python-all-dev (>= 2.3.5-11), python-central (>= 0.5.6), python-epydoc, quilt
-Standards-Version: 3.8.0
+Maintainer: Miguel Landaeta <miguel@miguel.cc>
+Build-Depends: debhelper (>= 7.0.50~), python, python-support, python-epydoc
+Standards-Version: 3.9.0
 XS-Python-Version: >= 2.5
 Vcs-Bzr: http://bazaar.launchpad.net/~ubuntu-virt/vmbuilder/trunk
 
@@ -53,4 +53,3 @@ Description: EC2 Ubuntu VM builder
  .
  VMBuilder module to build, upload and register EC2 images. You will
  need to have an Amazon EC2 account in order to use this package.
-
