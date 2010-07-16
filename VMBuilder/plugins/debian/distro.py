@@ -177,13 +177,16 @@ EOT''')
     def xen_kernel_version(self):
         if self.suite.xen_kernel_flavour:
             if not self.xen_kernel:
-                rmad = run_cmd('rmadison', 'linux-image-2.6-%s' % self.suite.xen_kernel_flavour)
+                # TODO: this have to be generic, take into account 686 and amd64
+                rmad = run_cmd('rmadison', 'linux-image-2.6-%s-686' % self.suite.xen_kernel_flavour)
                 version = ['0', '0','0', '0']
 
                 for line in rmad.splitlines():
                     sline = line.split('|')
                     
-                    if sline[2].strip().startswith(self.vm.suite):
+                    #TODO: fix this very ugly hack
+                    #if sline[2].strip().startswith(self.vm.suite):
+                    if sline[2].strip().startswith('testing'):
                         vt = sline[1].strip().split('.')
                         for i in range(4):
                             if int(vt[i]) > int(version[i]):
@@ -193,7 +196,11 @@ EOT''')
                 if version[0] == '0':
                     raise VMBuilderException('Something is wrong, no valid xen kernel for the suite %s found by rmadison' % self.vm.suite)
                 
-                self.xen_kernel = '%s.%s.%s-%s' % (version[0],version[1],version[2],version[3])
+                logging.info('version[0] = %s' % version[0])
+                logging.info('version[1] = %s' % version[1])
+                logging.info('version[2] = %s' % version[2])
+                #self.xen_kernel = '%s.%s.%s-%s' % (version[0],version[1],version[2],version[3])
+                self.xen_kernel = '%s.%s.%s' % (version[0],version[1],version[2])
             return self.xen_kernel
         else:
             raise VMBuilderUserError('There is no valid xen kernel for the suite selected.')
