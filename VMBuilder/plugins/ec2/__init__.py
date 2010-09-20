@@ -56,7 +56,7 @@ class EC2(Plugin):
 
         if self.vm.ec2_bundle:
             try:
-                run_cmd('ec2-ami-tools-version')
+                run_cmd('euca-version')
             except VMBuilderException, e:
                 raise VMBuilderUserError('You need to have the Amazon EC2 AMI tools installed')
 
@@ -114,6 +114,8 @@ class EC2(Plugin):
         self.install_from_template('/etc/ec2_version', 'ec2_version', { 'version' : self.vm.ec2_version } )
         self.install_from_template('/etc/ssh/sshd_config', 'sshd_config')
         self.install_from_template('/etc/sudoers', 'sudoers')
+        self.run_in_target('mkdir', '/boot/grub')
+        self.install_from_template('/boot/grub/menu.lst', 'menu.lst')
 
         if self.vm.ec2_landscape:
             self.install_from_template('/etc/default/landscape-client', 'landscape_client')
@@ -126,13 +128,13 @@ class EC2(Plugin):
 
         if self.vm.ec2_bundle:
             logging.info("Building EC2 bundle")
-            bundle_cmdline = ['ec2-bundle-image', '--image', self.vm.filesystems[0].filename, '--cert', self.vm.ec2_cert, '--privatekey', self.vm.ec2_key, '--user', self.vm.ec2_user, '--prefix', self.vm.ec2_name, '-r', ['i386', 'x86_64'][self.vm.arch == 'amd64'], '-d', self.vm.workdir, '--kernel', self.vm.ec2_kernel, '--ramdisk', self.vm.ec2_ramdisk]
+            bundle_cmdline = ['euca-bundle-image', '--image', self.vm.filesystems[0].filename, '--cert', self.vm.ec2_cert, '--privatekey', self.vm.ec2_key, '--user', self.vm.ec2_user, '--prefix', self.vm.ec2_name, '-r', ['i386', 'x86_64'][self.vm.arch == 'amd64'], '-d', self.vm.workdir, '--kernel', self.vm.ec2_kernel, '--ramdisk', self.vm.ec2_ramdisk, '--ec2cert', self.vm.ec2_cert]
             run_cmd(*bundle_cmdline)
 
             manifest = '%s/%s.manifest.xml' % (self.vm.workdir, self.vm.ec2_name)
             if self.vm.ec2_upload:
                 logging.info("Uploading EC2 bundle")
-                upload_cmdline = ['ec2-upload-bundle', '--retry', '--manifest', manifest, '--bucket', self.vm.ec2_bucket, '--access-key', self.vm.ec2_access_key, '--secret-key', self.vm.ec2_secret_key]
+                upload_cmdline = ['euca-upload-bundle', '--manifest', manifest, '--bucket', self.vm.ec2_bucket, '--access-key', self.vm.ec2_access_key, '--secret-key', self.vm.ec2_secret_key, '--url', 'https://s3.amazonaws.com:443']
                 run_cmd(*upload_cmdline)
 
                 if self.vm.ec2_register:

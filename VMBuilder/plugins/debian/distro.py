@@ -184,9 +184,7 @@ EOT''')
                 for line in rmad.splitlines():
                     sline = line.split('|')
                     
-                    #TODO: fix this very ugly hack
-                    #if sline[2].strip().startswith(self.vm.suite):
-                    if sline[2].strip().startswith('testing'):
+                    if sline[2].strip().startswith(self.vm.suite):
                         vt = sline[1].strip().split('.')
                         for i in range(4):
                             if int(vt[i]) > int(version[i]):
