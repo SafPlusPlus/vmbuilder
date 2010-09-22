@@ -128,13 +128,13 @@ class EC2(Plugin):
 
         if self.vm.ec2_bundle:
             logging.info("Building EC2 bundle")
-            bundle_cmdline = ['euca-bundle-image', '--image', self.vm.filesystems[0].filename, '--cert', self.vm.ec2_cert, '--privatekey', self.vm.ec2_key, '--user', self.vm.ec2_user, '--prefix', self.vm.ec2_name, '-r', ['i386', 'x86_64'][self.vm.arch == 'amd64'], '-d', self.vm.workdir, '--kernel', self.vm.ec2_kernel, '--ramdisk', self.vm.ec2_ramdisk, '--ec2cert', self.vm.ec2_cert]
+            bundle_cmdline = ['euca-bundle-image', '--image', self.vm.filesystems[0].filename, '--cert', self.vm.ec2_cert, '--privatekey', self.vm.ec2_key, '--user', self.vm.ec2_user, '--prefix', self.vm.ec2_name, '-r', ['i386', 'x86_64'][self.vm.arch == 'amd64'], '-d', self.vm.workdir, '--kernel', self.vm.ec2_kernel, '--ramdisk', self.vm.ec2_ramdisk, '--ec2cert', '/etc/ec2/amitools/cert-ec2.pem']
             run_cmd(*bundle_cmdline)
 
             manifest = '%s/%s.manifest.xml' % (self.vm.workdir, self.vm.ec2_name)
             if self.vm.ec2_upload:
                 logging.info("Uploading EC2 bundle")
-                upload_cmdline = ['euca-upload-bundle', '--manifest', manifest, '--bucket', self.vm.ec2_bucket, '--access-key', self.vm.ec2_access_key, '--secret-key', self.vm.ec2_secret_key, '--url', 'https://s3.amazonaws.com:443']
+                upload_cmdline = ['euca-upload-bundle', '--manifest', manifest, '--bucket', self.vm.ec2_bucket, '--access-key', self.vm.ec2_access_key, '--secret-key', self.vm.ec2_secret_key, '--url', 'https://s3.amazonaws.com:443', '--ec2cert', '/etc/ec2/amitools/cert-ec2.pem']
                 run_cmd(*upload_cmdline)
 
                 if self.vm.ec2_register:
