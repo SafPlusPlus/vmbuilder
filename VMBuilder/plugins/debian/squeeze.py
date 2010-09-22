@@ -156,7 +156,7 @@ class Squeeze(suite.Suite):
         if self.vm.ssh_user_key or self.vm.ssh_key:
             if not self.vm.addpkg:
                 self.vm.addpkg = []
-            self.vm.addpkg += ['openssh-server', 'linux-image-2.6.32-5-686-bigmem']
+            self.vm.addpkg += ['openssh-server']
 
     def mount_dev_proc(self):
         run_cmd('mount', '--bind', '/dev', '%s/dev' % self.destdir)
@@ -382,6 +382,7 @@ class Squeeze(suite.Suite):
     def apply_ec2_settings(self):
         # TODO: add locales in another place
         self.vm.addpkg += ['openssh-server',
+                          'linux-image-2.6.32-5-686-bigmem',
                           'locales']
 
     def disable_hwclock_access(self):
