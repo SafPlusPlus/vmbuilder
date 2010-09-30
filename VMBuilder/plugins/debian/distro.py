@@ -21,6 +21,7 @@ import os
 import socket
 import types
 import shutil
+import time
 import VMBuilder
 from   VMBuilder           import register_distro, Distro
 from   VMBuilder.util      import run_cmd
@@ -169,9 +170,13 @@ class Debian(Distro):
             run_cmd('mount', '--bind', disk.filename, '%s%s' % (self.destdir, new_filename))
             devmap.write("(hd%d) %s\n" % (id, new_filename))
         devmap.close()
-        self.run_in_target('grub', '--device-map=%s' % devmapfile, '--batch',  stdin='''root (hd0,0)
-setup (hd0)
-EOT''')
+        #self.run_in_target('grub', '--device-map=%s' % devmapfile, '--batch',  stdin='''root (hd0,0)
+#setup (hd0)
+#EOT''')
+        #self.run_in_target('grub-install', '--force', '--no-floppy', '$real_device')
+        logging.info('Stopping execution for 3 minutes for debugging purposes')
+        logging.info('The bootloader was not installed')
+        time.sleep(3 * 60)
         self.install_bootloader_cleanup()
 
     def xen_kernel_version(self):

@@ -313,8 +313,9 @@ class Squeeze(suite.Suite):
 
     def install_grub(self):
         #os.environ['DEBIAN_PRIORITY'] = 'critical'
-        self.run_in_target(env={ 'DEBIAN_FRONTEND' : 'noninteractive' }, 'apt-get', '--force-yes', '-y', 'install', 'grub-pc')
-        run_cmd('rsync', '-a', '%s%s/%s/' % (self.destdir, self.grubroot, self.vm.arch == 'amd64' and 'x86_64-pc' or 'i386-pc'), '%s/boot/grub/' % self.destdir) 
+        self.run_in_target('apt-get', '--force-yes', '-y', 'install', 'grub-pc',
+                           env={ 'DEBIAN_FRONTEND' : 'noninteractive' })
+        run_cmd('rsync', '-a', '%s%s/i386-pc/' % (self.destdir, self.grubroot), '%s/boot/grub/' % self.destdir)
 
     def create_devices(self):
         import VMBuilder.plugins.xen
@@ -350,6 +351,7 @@ class Squeeze(suite.Suite):
             os.makedirs('%s/var/lock' % fs.mntpath)
 
     def copy_settings(self):
+        self.run_in_target('apt-get', '--force-yes', '-y', 'install', 'locales')
         if os.path.exists('/etc/default/locale'):
             self.copy_to_target('/etc/default/locale', '/etc/default/locale')
         self.run_in_target('dpkg-reconfigure', '-fnoninteractive', '-pcritical', 'libc6')
