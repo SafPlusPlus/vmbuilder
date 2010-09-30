@@ -174,6 +174,7 @@ class Debian(Distro):
 #setup (hd0)
 #EOT''')
         #self.run_in_target('grub-install', '--force', '--no-floppy', '$real_device')
+        #TODO: find a way to install grub2 bootloader in the chroot
         logging.info('Stopping execution for 3 minutes for debugging purposes')
         logging.info('The bootloader was not installed')
         time.sleep(3 * 60)

@@ -34,6 +34,7 @@ class KVM(Hypervisor):
         self.imgs = []
         self.cmdline = ['kvm', '-m', str(self.vm.mem), '-smp', str(self.vm.cpus) ]
         for disk in self.vm.disks:
+            #TODO: this convert is not working, the images are not recognized with virt-manager
             img_path = disk.convert(self.vm.destdir, self.filetype)
             self.imgs.append(img_path)
             self.vm.result_files.append(img_path)

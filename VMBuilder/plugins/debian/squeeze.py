@@ -230,6 +230,7 @@ class Squeeze(suite.Suite):
 
     def install_menu_lst(self):
         self.run_in_target(self.updategrub)
+        #TODO: fix grub.cfg file (root device, root uuid and root kernel device)
         #self.mangle_grub_menu_lst()
         #self.run_in_target(self.updategrub)
         #self.run_in_target('grub-set-default', '0')
