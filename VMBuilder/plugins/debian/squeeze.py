@@ -229,10 +229,10 @@ class Squeeze(suite.Suite):
             run_cmd('umount', mntpnt)
 
     def install_menu_lst(self):
-        self.run_in_target(self.updategrub, '-y')
-        self.mangle_grub_menu_lst()
         self.run_in_target(self.updategrub)
-        self.run_in_target('grub-set-default', '0')
+        #self.mangle_grub_menu_lst()
+        #self.run_in_target(self.updategrub)
+        #self.run_in_target('grub-set-default', '0')
 
     def mangle_grub_menu_lst(self):
         bootdev = disk.bootpart(self.vm.disks)
@@ -309,10 +309,11 @@ class Squeeze(suite.Suite):
 
     def install_kernel(self):
         self.install_from_template('/etc/kernel-img.conf', 'kernelimg', { 'updategrub' : self.updategrub }) 
-        run_cmd('chroot', self.destdir, 'apt-get', '--force-yes', '-y', 'install', self.kernel_name(), 'grub')
+        run_cmd('chroot', self.destdir, 'apt-get', '--force-yes', '-y', 'install', self.kernel_name(), 'grub-pc')
 
     def install_grub(self):
-        self.run_in_target('apt-get', '--force-yes', '-y', 'install', 'grub-pc')
+        #os.environ['DEBIAN_PRIORITY'] = 'critical'
+        self.run_in_target(env={ 'DEBIAN_FRONTEND' : 'noninteractive' }, 'apt-get', '--force-yes', '-y', 'install', 'grub-pc')
         run_cmd('rsync', '-a', '%s%s/%s/' % (self.destdir, self.grubroot, self.vm.arch == 'amd64' and 'x86_64-pc' or 'i386-pc'), '%s/boot/grub/' % self.destdir) 
 
     def create_devices(self):
