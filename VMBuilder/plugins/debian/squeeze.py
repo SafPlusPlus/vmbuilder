@@ -312,7 +312,7 @@ class Squeeze(suite.Suite):
         run_cmd('chroot', self.destdir, 'apt-get', '--force-yes', '-y', 'install', self.kernel_name(), 'grub')
 
     def install_grub(self):
-        self.run_in_target('apt-get', '--force-yes', '-y', 'install', 'grub')
+        self.run_in_target('apt-get', '--force-yes', '-y', 'install', 'grub-pc')
         run_cmd('rsync', '-a', '%s%s/%s/' % (self.destdir, self.grubroot, self.vm.arch == 'amd64' and 'x86_64-pc' or 'i386-pc'), '%s/boot/grub/' % self.destdir) 
 
     def create_devices(self):
