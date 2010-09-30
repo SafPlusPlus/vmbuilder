@@ -2,7 +2,7 @@ vm-builder (0.11.3-1) UNRELEASED; urgency=low
 
   * Initial release in Debian. (Closes: #XXXXXX).
 
- -- Miguel Landaeta <miguel@miguel.cc>  Tue, 21 Sep 2010 21:04:34 -0430
+ -- Miguel Landaeta <miguel@miguel.cc>  Wed, 29 Sep 2010 22:15:14 -0430
 
 vm-builder (0.11.3-0ubuntu1) karmic; urgency=low
 
